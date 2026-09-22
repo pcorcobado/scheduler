@@ -1,0 +1,67 @@
+[
+	{
+		"project_name": "project1",
+		"environment": {
+			"dev": {
+				"turn_on": "20 4 1,5-31 * *",
+				"turn_off": "0 19 4-31 * *"
+			},
+			"pre":
+				"turn_on": "20 4 1,5-31 * *",
+				"turn_off": "0 19 4-31 * *"
+			}
+		}
+	},
+	{
+		"project_name": "project2",
+		"environment": {
+			"dev": {
+				"turn_on": "20 4 1,5-31 * *",
+				"turn_off": "0 19 4-31 * *"
+			},
+			"pre":
+				"turn_on": "20 4 1,5-31 * *",
+				"turn_off": "0 19 4-31 * *"
+			}
+		}
+	},
+	{
+		"project_name": "project3",
+		"environment": {
+			"dev": {
+				"turn_on": "20 4 1,5-31 * *",
+				"turn_off": "0 19 4-31 * *"
+			},
+			"pre":
+				"turn_on": "20 4 1,5-31 * *",
+				"turn_off": "0 19 4-31 * *"
+			}
+		}
+	},
+	{
+		"project_name": "project4",
+		"environment": {
+			"dev": {
+				"turn_on": "20 4 1,5-31 * *",
+				"turn_off": "0 19 4-31 * *"
+			},
+			"pre":
+				"turn_on": "20 4 1,5-31 * *",
+				"turn_off": "0 19 4-31 * *"
+			}
+		}
+	},
+	{
+		"project_name": "project5",
+		"environment": {
+			"dev": {
+				"turn_on": "20 4 1,5-31 * *",
+				"turn_off": "0 19 4-31 * *"
+			},
+			"pre":
+				"turn_on": "20 4 1,5-31 * *",
+				"turn_off": "0 19 4-31 * *"
+			}
+		}
+	}
+]

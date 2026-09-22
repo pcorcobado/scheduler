@@ -1,0 +1,69 @@
+name: Scheduler
+on:
+  schedule:
+    - cron: "0 19 4-31 * *" # Turn OFF
+    - cron: "20 4 1,5-31 * *" # Turn ON
+  workflows_dispatch:
+    inputs:
+      project_name:
+        description: "Name of the project to be executed (must exist in projects.json)"
+        required: true
+        type: string
+      environment:
+        description: "Deployment environment"
+        required: true
+        type: choice
+        options:
+          - dev
+          - pre
+      operation:
+        description: "Operation to be performed"
+        required: true
+        type: choice
+        options:
+          - turn_On
+          - turn_Off
+
+  jobs:
+    load_config:
+      outputs:
+        matrix: ${{ steps.load.outputs.matrix }}
+      steps:
+
+        - name: Load and filter projects from config
+          id: load
+          run: |
+            if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+              MATRIX=$(jq -nc \
+                --arg name "${{ inputs.project_name }}" \
+                --arg env "${{ inputs.environment }}" \
+                --arg op "${{ inputs.operation }}" \
+                '[{project_name: $name, environment: $env, operation: $op}]')
+            else
+              MATRIX=$(jq -c --arg cron "${{ github.event.schedule }}" '
+                [ .[] as $proj
+                  | $proj.environment | to_entries[] as $envEntry
+                  | $envEntry.value | to_entries[] as $opEntry
+                  | select($opEntry.value == $cron)
+                  | {project_name: $proj.project_name, environment: $envEntry.key, operation: $opEntry.key}
+                ]' .organization/config/projects.json)
+            fi
+            echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+            echo "Proyectos seleccionados: $MATRIX"
+
+  run_projects:
+    name: Run ${{ matrix.project.project_name }} ${{ matrix.project.environment }}
+    needs: load_config
+    if: needs.load_config.outputs.matrix != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJson(needs.load_config.outputs.matrix) }}
+    uses: .github/workflows/operations-reusable.yml@v1
+    with:
+      environment: ${{ matrix.project.environment }}
+      project: ${{ matrix.project.project_name }}
+      operation: ${{ matrix.project.operation }}
+    secrets: inherit
+
+
