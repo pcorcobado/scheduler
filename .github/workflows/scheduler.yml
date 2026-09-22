@@ -59,7 +59,7 @@ on:
       fail-fast: false
       matrix:
         project: ${{ fromJson(needs.load_config.outputs.matrix) }}
-    uses: .github/workflows/operations-reusable.yml@v1
+    uses: pcorcobado/workflows/.github/workflows/operations-reusable.yml@v1
     with:
       environment: ${{ matrix.project.environment }}
       project: ${{ matrix.project.project_name }}
