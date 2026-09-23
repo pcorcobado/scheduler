@@ -24,32 +24,32 @@ on:
           - turn_On
           - turn_Off
 
-  jobs:
-    load_config:
-      outputs:
-        matrix: ${{ steps.load.outputs.matrix }}
-      steps:
+jobs:
+  load_config:
+    outputs:
+      matrix: ${{ steps.load.outputs.matrix }}
+    steps:
 
-        - name: Load and filter projects from config
-          id: load
-          run: |
-            if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-              MATRIX=$(jq -nc \
-                --arg name "${{ inputs.project_name }}" \
-                --arg env "${{ inputs.environment }}" \
-                --arg op "${{ inputs.operation }}" \
-                '[{project_name: $name, environment: $env, operation: $op}]')
-            else
-              MATRIX=$(jq -c --arg cron "${{ github.event.schedule }}" '
-                [ .[] as $proj
-                  | $proj.environment | to_entries[] as $envEntry
-                  | $envEntry.value | to_entries[] as $opEntry
-                  | select($opEntry.value == $cron)
-                  | {project_name: $proj.project_name, environment: $envEntry.key, operation: $opEntry.key}
-                ]' .organization/config/projects.json)
-            fi
-            echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
-            echo "Proyectos seleccionados: $MATRIX"
+      - name: Load and filter projects from config
+        id: load
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            MATRIX=$(jq -nc \
+              --arg name "${{ inputs.project_name }}" \
+              --arg env "${{ inputs.environment }}" \
+              --arg op "${{ inputs.operation }}" \
+              '[{project_name: $name, environment: $env, operation: $op}]')
+          else
+            MATRIX=$(jq -c --arg cron "${{ github.event.schedule }}" '
+              [ .[] as $proj
+                | $proj.environment | to_entries[] as $envEntry
+                | $envEntry.value | to_entries[] as $opEntry
+                | select($opEntry.value == $cron)
+                | {project_name: $proj.project_name, environment: $envEntry.key, operation: $opEntry.key}
+              ]' .organization/config/projects.json)
+          fi
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+          echo "Proyectos seleccionados: $MATRIX"
 
   run_projects:
     name: Run ${{ matrix.project.project_name }} ${{ matrix.project.environment }}
