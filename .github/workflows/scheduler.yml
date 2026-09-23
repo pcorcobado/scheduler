@@ -3,7 +3,7 @@ on:
   schedule:
     - cron: "0 19 4-31 * *" # Turn OFF
     - cron: "20 4 1,5-31 * *" # Turn ON
-  workflows_dispatch:
+  workflow_dispatch:
     inputs:
       project_name:
         description: "Name of the project to be executed (must exist in projects.json)"
