@@ -26,6 +26,7 @@ on:
 
 jobs:
   load_config:
+    runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.load.outputs.matrix }}
     steps:
