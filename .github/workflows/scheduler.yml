@@ -26,7 +26,7 @@ on:
 
 jobs:
   load_config:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       matrix: ${{ steps.load.outputs.matrix }}
     steps:
