@@ -53,6 +53,10 @@ jobs:
           echo "Proyectos seleccionados: $MATRIX"
 
   run_projects:
+    # Required by GitHub OIDC
+    permissions:
+      id-token: write
+      contents: read
     name: Run ${{ matrix.project.project_name }} ${{ matrix.project.environment }}
     needs: load_config
     if: needs.load_config.outputs.matrix != '[]'
