@@ -1,8 +1,8 @@
 name: Scheduler
 on:
-  schedule:
-    - cron: "0 19 4-31 * *" # Turn OFF
-    - cron: "20 4 1,5-31 * *" # Turn ON
+  #schedule:
+  #  - cron: "0 19 4-31 * *" # Turn OFF
+  #  - cron: "20 4 1,5-31 * *" # Turn ON
   workflow_dispatch:
     inputs:
       project_name:
